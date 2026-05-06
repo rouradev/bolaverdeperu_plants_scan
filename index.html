@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botanica | Lector de Plantas</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <main id="app-container">
+        <header>
+            <p class="subtitle">Inteligencia Botánica</p>
+            <h1>BOTANICA</h1>
+        </header>
+
+        <section class="api-key-section" style="display: none;">
+            <input type="text" class="api-key-input" id="api-key-input" placeholder="API key configurada">
+
+        <section class="hero-action">
+            <div class="camera-btn" id="open-camera">
+                <i class="fa-solid fa-camera"></i>
+            </div>
+            <p class="scan-text">Toca para Identificar</p>
+        </section>
+
+        <section class="search-container">
+            <input type="text" class="search-bar" id="search-input" placeholder="Buscar en el catálogo...">
+        </section>
+
+        <section class="plant-grid" id="plant-list">
+            <!-- Las plantas se cargarán aquí dinámicamente -->
+        </section>
+    </main>
+
+    <!-- Vista de Cámara -->
+    <div id="camera-view">
+        <video id="video" autoplay playsinline></video>
+        <div class="camera-overlay">
+            <button class="close-camera" id="close-camera">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="scan-box">
+                <div class="laser"></div>
+            </div>
+            <div class="scan-controls" style="text-align: center;">
+                <p style="margin-bottom: 2rem;">Encuadra la planta en el cuadro</p>
+                <div class="camera-btn" id="take-photo" style="width: 80px; height: 80px; margin: 0 auto;">
+                    <i class="fa-solid fa-circle" style="font-size: 1.5rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Resultados -->
+    <div class="modal" id="result-modal">
+        <div class="modal-header">
+            <span class="modal-category" id="res-category">Categoría</span>
+            <button class="close-modal" id="close-modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="modal-images" id="res-images">
+            <!-- Imágenes de la API -->
+        </div>
+        <h2 class="modal-title" id="res-name">Nombre Común</h2>
+        <p class="modal-scientific" id="res-scientific">Nombre Científico</p>
+        <p class="modal-description" id="res-description">Descripción detallada de la planta...</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

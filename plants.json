@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "scientific_name": "Acacia retinoides",
+    "common_name": "Mimosa",
+    "category": "Árboles Ornamentales",
+    "description": "Árbol de hoja perenne con flores amarillas globulares muy fragantes."
+  },
+  {
+    "id": 2,
+    "scientific_name": "Araucaria excelsa",
+    "common_name": "Pino navideño",
+    "category": "Árboles Ornamentales",
+    "description": "Conífera de crecimiento simétrico, muy utilizada como árbol ornamental y de Navidad."
+  },
+  {
+    "id": 3,
+    "scientific_name": "Callistemon speciosus",
+    "common_name": "Escobillón",
+    "category": "Árboles Ornamentales",
+    "description": "Arbusto o árbol pequeño con flores en forma de cepillo de color rojo intenso."
+  },
+  {
+    "id": 4,
+    "scientific_name": "Dionaea muscipula",
+    "common_name": "Venus atrapa moscas",
+    "category": "Plantas Carnívoras",
+    "description": "Planta carnívora que atrapa insectos mediante hojas en forma de mandíbula."
+  },
+  {
+    "id": 5,
+    "scientific_name": "Echeveria spp",
+    "common_name": "Rosa verde",
+    "category": "Suculentas",
+    "description": "Planta suculenta que forma rosetas compactas de hojas carnosas."
+  },
+  {
+    "id": 6,
+    "scientific_name": "Strelitzia reginae",
+    "common_name": "Ave del paraíso",
+    "category": "Herbáceas Tropicales",
+    "description": "Planta tropical conocida por sus espectaculares flores que parecen la cabeza de un ave."
+  },
+  {
+    "id": 7,
+    "scientific_name": "Pouteria lucuma",
+    "common_name": "Lúcumo",
+    "category": "Árboles Frutales",
+    "description": "Árbol frutal originario de los valles interandinos, apreciado por su fruto dulce y harinoso."
+  },
+  {
+    "id": 8,
+    "scientific_name": "Persea americana",
+    "common_name": "Palto",
+    "category": "Árboles Frutales",
+    "description": "Árbol que produce el aguacate o palta, de alto valor nutricional."
+  },
+  {
+    "id": 9,
+    "scientific_name": "Echinocactus grussonii",
+    "common_name": "Asiento de suegra",
+    "category": "Cactus",
+    "description": "Cactus globular cubierto de espinas amarillas, muy popular en xerojardinería."
+  },
+  {
+    "id": 10,
+    "scientific_name": "Chrysalidocarpus lutescens",
+    "common_name": "Palmera hawaiana",
+    "category": "Palmeras",
+    "description": "Palmera de tallos múltiples y frondas arqueadas, muy común en interiores y jardines tropicales."
+  },
+  {
+    "id": 11,
+    "scientific_name": "Monstera deliciosa",
+    "common_name": "Costilla de Adán",
+    "category": "Plantas de Interior",
+    "description": "Planta trepadora famosa por sus grandes hojas verdes con agujeros naturales."
+  }
+]
