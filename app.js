@@ -166,7 +166,10 @@ takePhotoBtn.addEventListener('click', async () => {
                 { method: 'POST', body: formData }
             );
             
-            if (!response.ok) throw new Error('Error en la respuesta de la API');
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ message: "Error desconocido" }));
+                throw new Error(`Error ${response.status}: ${errorData.message || response.statusText}`);
+            }
             
             const data = await response.json();
             
@@ -181,11 +184,11 @@ takePhotoBtn.addEventListener('click', async () => {
                 };
                 showPlantDetails(plant);
             } else {
-                alert('No se pudo identificar. Intenta con otra foto.');
+                alert('No se pudo identificar. Intenta con otra foto (asegúrate de que la planta sea el centro de la imagen).');
             }
         } catch (error) {
-            console.error('Error:', error);
-            alert('Error al conectar con Pl@ntNet. Revisa tu API Key y conexión.');
+            console.error('Error de identificación:', error);
+            alert(`Error de Conexión/API:\n${error.message}\n\nVerifica que tu API Key sea válida y que tengas conexión a internet.`);
         } finally {
             closeCamera();
             takePhotoBtn.style.opacity = '1';
