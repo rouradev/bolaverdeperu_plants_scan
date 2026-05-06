@@ -81,14 +81,39 @@ searchInput.addEventListener('input', (e) => {
 // Lógica de Cámara
 openCameraBtn.addEventListener('click', async () => {
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: "environment" }, 
+        // Intentar primero con la cámara trasera
+        const constraints = { 
+            video: { 
+                facingMode: { ideal: "environment" },
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            }, 
             audio: false 
-        });
+        };
+        
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
         video.srcObject = stream;
+        
+        // Asegurar que el video se reproduzca en iOS/Android
+        video.setAttribute('autoplay', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
+        
         cameraView.style.display = 'block';
+        
+        video.play().catch(e => console.error("Error al reproducir video:", e));
+        
     } catch (err) {
-        alert("No se pudo acceder a la cámara: " + err.message);
+        console.error("Error cámara:", err);
+        // Fallback: intentar cualquier cámara si falla la trasera específica
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            cameraView.style.display = 'block';
+            video.play();
+        } catch (err2) {
+            alert("No se pudo acceder a la cámara. Por favor, asegúrate de dar permisos en tu navegador: " + err2.message);
+        }
     }
 });
 
@@ -102,30 +127,36 @@ function closeCamera() {
         const tracks = stream.getTracks();
         tracks.forEach(track => track.stop());
     }
+    video.srcObject = null;
     cameraView.style.display = 'none';
 }
 
 takePhotoBtn.addEventListener('click', async () => {
     if (!plantNetApiKey) {
-        alert('API key no configurada. Obtén una gratis en https://my.plantnet.org/register');
+        alert('API key no configurada.');
         return;
     }
 
     // Capturar foto
     const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    // Usar dimensiones reales del video capturado
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 480;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     
     // Convertir a blob
     canvas.toBlob(async (blob) => {
+        if (!blob) {
+            alert("Error al capturar la imagen.");
+            return;
+        }
+
         takePhotoBtn.style.opacity = '0.5';
         takePhotoBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
         takePhotoBtn.style.pointerEvents = 'none';
         
         try {
-            // Llamar a Pl@ntNet API
             const formData = new FormData();
             formData.append('images', blob, 'plant.jpg');
             formData.append('organs', 'auto');
@@ -135,6 +166,8 @@ takePhotoBtn.addEventListener('click', async () => {
                 { method: 'POST', body: formData }
             );
             
+            if (!response.ok) throw new Error('Error en la respuesta de la API');
+            
             const data = await response.json();
             
             if (data.results && data.results.length > 0) {
@@ -143,16 +176,16 @@ takePhotoBtn.addEventListener('click', async () => {
                     common_name: result.species.commonNames?.[0] || result.species.scientificNameWithoutAuthor,
                     scientific_name: result.species.scientificNameWithoutAuthor,
                     category: result.species.family?.scientificNameWithoutAuthor || 'Planta identificada',
-                    description: `Familia: ${result.species.family?.scientificNameWithoutAuthor || 'Desconocida'}. Score de confianza: ${Math.round(result.score * 100)}%`,
+                    description: `Familia: ${result.species.family?.scientificNameWithoutAuthor || 'Desconocida'}. Confianza: ${Math.round(result.score * 100)}%`,
                     images: result.species?.images || []
                 };
                 showPlantDetails(plant);
             } else {
-                alert('No se pudo identificar la planta. Intenta con otra foto.');
+                alert('No se pudo identificar. Intenta con otra foto.');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error al identificar. Revisa tu conexión.');
+            alert('Error al conectar con Pl@ntNet. Revisa tu API Key y conexión.');
         } finally {
             closeCamera();
             takePhotoBtn.style.opacity = '1';
@@ -170,22 +203,26 @@ const saveApiKeyBtn = document.getElementById('save-api-key');
 const savedApiKey = localStorage.getItem('plantnet_api_key');
 if (savedApiKey) {
     plantNetApiKey = savedApiKey;
-    apiKeyInput.value = savedApiKey;
-    apiKeyInput.type = 'password';
-    apiKeyInput.placeholder = 'API key guardada ✓';
-}
-
-saveApiKeyBtn.addEventListener('click', () => {
-    const key = apiKeyInput.value.trim();
-    if (key) {
-        plantNetApiKey = key;
-        localStorage.setItem('plantnet_api_key', key);
+    if (apiKeyInput) {
+        apiKeyInput.value = savedApiKey;
         apiKeyInput.type = 'password';
         apiKeyInput.placeholder = 'API key guardada ✓';
-        apiKeyInput.value = '';
-        alert('API key guardada correctamente');
     }
-});
+}
+
+if (saveApiKeyBtn) {
+    saveApiKeyBtn.addEventListener('click', () => {
+        const key = apiKeyInput.value.trim();
+        if (key) {
+            plantNetApiKey = key;
+            localStorage.setItem('plantnet_api_key', key);
+            apiKeyInput.type = 'password';
+            apiKeyInput.placeholder = 'API key guardada ✓';
+            apiKeyInput.value = '';
+            alert('API key guardada correctamente');
+        }
+    });
+}
 
 // Inicializar
 loadPlants();
