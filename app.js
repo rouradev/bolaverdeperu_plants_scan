@@ -161,8 +161,9 @@ takePhotoBtn.addEventListener('click', async () => {
             formData.append('images', blob, 'plant.jpg');
             formData.append('organs', 'auto');
             
+            // Usamos nuestro proxy interno para evitar errores de CORS
             const response = await fetch(
-                `https://my-api.plantnet.org/v2/identify/all?lang=es&api-key=${plantNetApiKey}`,
+                `/api/identify?lang=es`,
                 { method: 'POST', body: formData }
             );
             
