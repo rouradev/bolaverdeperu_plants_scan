@@ -153,7 +153,7 @@ takePhotoBtn.addEventListener('click', async () => {
         }
 
         takePhotoBtn.style.opacity = '0.5';
-        takePhotoBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        takePhotoBtn.innerHTML = '<i class="fa-solid fa-sync fa-spin"></i>';
         takePhotoBtn.style.pointerEvents = 'none';
         
         try {
